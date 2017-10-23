@@ -36,7 +36,7 @@ export default class SourceListItem extends Component {
           const { dispatch } = this.props;
           if (localStorage.getItem(source.id)) {
             const now = new Date();
-            const timeDifference = 10000;
+            const timeDifference = 1200000;
             const localStorageData = JSON.parse(localStorage.getItem(source.id));
             debugger
             if ((now.getTime() - localStorageData.timestamp) <= timeDifference) {
