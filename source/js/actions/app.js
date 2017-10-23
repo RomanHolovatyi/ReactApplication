@@ -1,48 +1,76 @@
 import api from 'api';
 
-export const TEST_ACTION = 'TEST_ACTION';
+export const ASYNC_ACTION_START = 'ASYNC_ACTION_START';
+export const ASYNC_ACTION_START_NEWS = 'ASYNC_ACTION_START_NEWS';
+export const ASYNC_ACTION_ERROR = 'ASYNC_ACTION_ERROR';
+export const ASYNC_ACTION_SUCCESS = 'ASYNC_ACTION_SUCCESS';
+export const ASYNC_ACTION_SUCCESS_NEWS = 'ASYNC_ACTION_SUCCESS_NEWS';
+export const ASYNC_ACTION_NEWS_LOCAL = 'ASYNC_ACTION_NEWS_LOCAL'
 
-export const TEST_ASYNC_ACTION_START = 'TEST_ASYNC_ACTION_START';
-export const TEST_ASYNC_ACTION_ERROR = 'TEST_ASYNC_ACTION_ERROR';
-export const TEST_ASYNC_ACTION_SUCCESS = 'TEST_ASYNC_ACTION_SUCCESS';
-
-// Test action
-
-export function testAction() {
+function asyncStart() {
   return {
-    type: TEST_ACTION,
+    type: ASYNC_ACTION_START,
   };
 }
 
-// Async action example
-
-function testAsyncStart() {
+function asyncStartNews() {
   return {
-    type: TEST_ASYNC_ACTION_START,
+    type: ASYNC_ACTION_START_NEWS,
   };
 }
 
-function testAsyncSuccess(data) {
+function asyncSuccess(data) {
   return {
-    type: TEST_ASYNC_ACTION_SUCCESS,
+    type: ASYNC_ACTION_SUCCESS,
     data,
   };
 }
 
-function testAsyncError(error) {
+function asyncSuccessNews(data) {
   return {
-    type: TEST_ASYNC_ACTION_ERROR,
+    type: ASYNC_ACTION_SUCCESS_NEWS,
+    data,
+  };
+}
+
+function asyncError(error) {
+  return {
+    type: ASYNC_ACTION_ERROR,
     error,
   };
 }
 
-export function testAsync() {
+export function asyncSources() {
   return function (dispatch) {
-    dispatch(testAsyncStart());
+    dispatch(asyncStart());
 
-    api.testAsync()
-      .then(data => dispatch(testAsyncSuccess(data)))
-      .catch(error => dispatch(testAsyncError(error)));
+    api.getNewsSources()
+      .then(data => dispatch(asyncSuccess(data)))
+      .catch(error => dispatch(asyncError(error)));
+  };
+}
+export function asyncNewsLocal(source) {
+  return function (dispatch) {
+    let data = {};
+    const localStorageData = JSON.parse(localStorage.getItem(source.id));
+    data.articles = localStorageData.articles;
+    data.source = source.id;
+    data.sortBy = 'top';
+    dispatch(asyncSuccessNews(data));
+  };
+}
+
+export function asyncNews(sourceName, sortBy) {
+  return async function (dispatch) {
+    try {
+      await dispatch(asyncStartNews())
+      const res = await api.getNews(sourceName, sortBy)
+      console.log('action')
+      dispatch(asyncSuccessNews(res))
+    } catch (error) {
+      console.log('err')
+      dispatch(asyncError(error))
+    }
   };
 }
 

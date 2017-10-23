@@ -1,5 +1,5 @@
 {
-  "name": "marvin",
+  "name": "news",
   "version": "0.2.1",
   "private": false,
   "license": "MIT",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
+    "axios": "^0.17.0",
     "babel-core": "^6.7.2",
     "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.1",
@@ -82,21 +83,12 @@
     "transit-js": "^0.8.846"
   },
   "description": "Starter boilerplate for React and Redux, using Webpack 3",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/workco/marvin.git"
-  },
   "keywords": [
     "react",
     "redux",
     "webpack2",
     "boilerplate"
   ],
-  "author": "Stanko",
-  "bugs": {
-    "url": "https://github.com/workco/marvin/issues"
-  },
-  "homepage": "https://github.com/workco/marvin#readme",
   "prepush": [
     "npm run lint-hook --silent"
   ]
